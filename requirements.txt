@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+requests
+huggingface_hub
