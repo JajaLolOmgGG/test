@@ -179,10 +179,6 @@ def cleanup(local_path):
     except OSError as e:
         print(f'Error al eliminar el archivo local: {e}')
         
-def start_uvicorn():
-    """Función para iniciar el servidor Uvicorn."""
-    uvicorn.run(app, host="0.0.0.0", port=7860)
-
 @app.get("/")
 async def read_root():
     return {"message": "HuggingFace to Gofile Transfer Service"}
@@ -194,10 +190,7 @@ async def get_uploads():
 
 def main():
     """Función principal para sincronizar archivos de un Space a Gofile"""
-    # Iniciar el servidor web en un hilo separado
-    uvicorn_thread = threading.Thread(target=start_uvicorn)
-    uvicorn_thread.daemon = True  # El hilo terminará cuando el programa principal termine
-    uvicorn_thread.start()
+
     
     print("Iniciando transferencia de archivos desde HuggingFace a Gofile...")
     
