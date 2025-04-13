@@ -1,22 +1,15 @@
 import os
 import time
 import requests
-import uvicorn
-import threading
 import json
-from fastapi import FastAPI
 
 # Configuración inicial
 SOURCE_SPACE = 'littletest/Why'  # Espacio de origen
 TEMP_DOWNLOAD_DIR = './temp_downloads'
 TIMEOUT_BETWEEN_UPLOADS = 5  # Tiempo de espera en segundos (fijo)
-GOFILE_UPLOAD_URL = 'https://upload.gofile.io/uploadFile'
 
 # Lista para almacenar información de las subidas exitosas
 successful_uploads = []
-
-# Crear la instancia de FastAPI
-app = FastAPI()
 
 def get_file_list(space_name):
     """
@@ -178,19 +171,9 @@ def cleanup(local_path):
         print(f'Archivo local eliminado: {local_path}')
     except OSError as e:
         print(f'Error al eliminar el archivo local: {e}')
-        
-@app.get("/")
-async def read_root():
-    return {"message": "HuggingFace to Gofile Transfer Service"}
-
-@app.get("/uploads")
-async def get_uploads():
-    """Endpoint para obtener la lista de subidas exitosas"""
-    return {"uploads": successful_uploads}
 
 def main():
     """Función principal para sincronizar archivos de un Space a Gofile"""
-
     
     print("Iniciando transferencia de archivos desde HuggingFace a Gofile...")
     
@@ -229,16 +212,6 @@ def main():
     print("\nTransferencia completada.")
     print(f"Se subieron {len(successful_uploads)} archivos correctamente.")
     print(f"La información de las subidas está disponible en 'uploads_info.json'")
-    
-    # Mantener el servidor web ejecutándose
-    try:
-        print("\nServidor web activo en http://0.0.0.0:7860")
-        print("Visita /uploads para ver la información de las subidas")
-        print("Presiona Ctrl+C para salir.")
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("Programa terminado por el usuario.")
 
 if __name__ == '__main__':
     main()
